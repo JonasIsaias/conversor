@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Moeda</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Conversor de Moeda</h1>
+        <form id="converter-form">
+            <input type="number" id="valor" placeholder="Valor" required>
+            <select id="moeda">
+                <option value="BRL">Real</option>
+                <option value="USD">Dólar</option>
+            </select>
+            <button type="submit">Converter</button>
+        </form>
+        <p id="resultado"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
