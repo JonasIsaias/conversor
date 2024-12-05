@@ -19,9 +19,11 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     }
 
     if (moeda === "BRL") {
+        // Cotação de BRL para USD
         url = obterCotacaoUrl("USD", "BRL");
         moedaDestino = "USD";
     } else {
+        // Cotação de USD para BRL
         url = obterCotacaoUrl("BRL", "USD");
         moedaDestino = "BRL";
     }
@@ -30,16 +32,18 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
         .then(response => response.json())
         .then(data => {
             let cotacao = moeda === "BRL" ? parseFloat(data.USDBRL.ask) : parseFloat(data.BRLUSD.ask);
-            
+
             if (isNaN(cotacao)) {
                 alert("Erro na obtenção da cotação.");
                 return;
             }
 
             if (moeda === "BRL") {
-                valorConvertido = valor * cotacao;
+                // BRL para USD: Divida o valor pelo valor da cotação BRL/USD
+                valorConvertido = valor / cotacao; 
             } else {
-                valorConvertido = valor / cotacao;
+                // USD para BRL: Multiplique o valor pela cotação USD/BRL
+                valorConvertido = valor * cotacao;
             }
 
             if (isNaN(valorConvertido) || !isFinite(valorConvertido)) {
