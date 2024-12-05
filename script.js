@@ -13,7 +13,7 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     let moedaDestino = '';
     let valorConvertido = 0;
 
-    // Função para construir URL de acordo com a moeda de origem e destino
+    // Função para construir a URL para a API de conversão de moedas
     function obterCotacaoUrl(origem, destino) {
         return `https://economia.awesomeapi.com.br/last/${origem}-${destino}`;
     }
@@ -31,14 +31,14 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            // Verifica as cotações corretas dependendo da direção da conversão
+            // Verificar se a resposta contém as cotações corretas
             let cotacao;
             if (moeda === "BRL") {
-                // Cotação de BRL para USD: A chave é USDBRL.ask
-                cotacao = parseFloat(data.USDBRL.ask); // BRL para USD
+                // Cotação de BRL para USD (USDBRL.ask)
+                cotacao = parseFloat(data.USDBRL.ask);
             } else {
-                // Cotação de USD para BRL: A chave é BRLUSD.ask
-                cotacao = parseFloat(data.BRLUSD.ask); // USD para BRL
+                // Cotação de USD para BRL (BRLUSD.ask)
+                cotacao = parseFloat(data.BRLUSD.ask);
             }
 
             if (isNaN(cotacao)) {
@@ -46,13 +46,13 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
                 return;
             }
 
-            // Cálculo da conversão
+            // Lógica de conversão:
             if (moeda === "BRL") {
-                // Convertendo de BRL para USD: Divide o valor em BRL pela cotação USD-BRL
-                valorConvertido = valor / cotacao;
+                // Convertendo de BRL para USD
+                valorConvertido = valor / cotacao;  // BRL ÷ cotação = USD
             } else {
-                // Convertendo de USD para BRL: Multiplica o valor em USD pela cotação BRL-USD
-                valorConvertido = valor * cotacao;
+                // Convertendo de USD para BRL
+                valorConvertido = valor * cotacao;  // USD × cotação = BRL
             }
 
             if (isNaN(valorConvertido) || !isFinite(valorConvertido)) {
@@ -60,7 +60,7 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
                 return;
             }
 
-            // Formatação dos valores com base na moeda destino
+            // Formatação para exibir a moeda de destino corretamente
             const formatador = new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: moedaDestino === 'BRL' ? 'BRL' : 'USD',
