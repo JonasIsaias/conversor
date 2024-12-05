@@ -31,18 +31,25 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            let cotacao = moeda === "BRL" ? parseFloat(data.USDBRL.ask) : parseFloat(data.BRLUSD.ask);
+            // Extraímos a cotação com base no par de moedas
+            let cotacao;
+            if (moeda === "BRL") {
+                cotacao = parseFloat(data.USDBRL.ask); // BRL para USD
+            } else {
+                cotacao = parseFloat(data.BRLUSD.ask); // USD para BRL
+            }
 
             if (isNaN(cotacao)) {
                 alert("Erro na obtenção da cotação.");
                 return;
             }
 
+            // Lógica de conversão corrigida:
             if (moeda === "BRL") {
-                // BRL para USD: Divida o valor pelo valor da cotação BRL/USD
-                valorConvertido = valor / cotacao; 
+                // Convertendo de BRL para USD: Divide o valor em BRL pela cotação USD-BRL
+                valorConvertido = valor / cotacao;
             } else {
-                // USD para BRL: Multiplique o valor pela cotação USD/BRL
+                // Convertendo de USD para BRL: Multiplica o valor em USD pela cotação BRL-USD
                 valorConvertido = valor * cotacao;
             }
 
