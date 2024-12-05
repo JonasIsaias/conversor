@@ -3,42 +3,77 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     
     const valor = parseFloat(document.getElementById("valor").value);
     const moeda = document.getElementById("moeda").value;
-    
-    if (!valor || valor <= 0) {
+
+    // Verifica se o valor inserido é válido
+    if (isNaN(valor) || valor <= 0) {
         alert("Por favor, insira um valor válido.");
         return;
     }
-    
+
     let url = '';
     let moedaDestino = '';
-    let resultado = 0;
+    let valorConvertido = 0;
 
+    // Função para obter a URL da API
+    function obterCotacaoUrl(origem, destino) {
+        return `https://economia.awesomeapi.com.br/last/${origem}-${destino}`;
+    }
+
+    // Define a URL de acordo com a moeda de origem
     if (moeda === "BRL") {
         // Cotação de BRL para USD
-        url = https://economia.awesomeapi.com.br/last/USD-BRL;
+        url = obterCotacaoUrl("USD", "BRL");
         moedaDestino = "USD";
     } else {
         // Cotação de USD para BRL
-        url = https://economia.awesomeapi.com.br/last/BRL-USD;
+        url = obterCotacaoUrl("BRL", "USD");
         moedaDestino = "BRL";
     }
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            let cotacao = moeda === "BRL" ? parseFloat(data.USDBRL.ask) : parseFloat(data.BRLUSD.ask);
-            
+            // Verifica se as cotações estão corretas
+            let cotacao;
             if (moeda === "BRL") {
-                // Para conversão de BRL para USD, dividimos o valor pelo valor da cotação
-                resultado = valor * cotacao;
+                cotacao = parseFloat(data.USDBRL.ask); // BRL para USD
             } else {
-                resultado = valor / cotacao;
+                cotacao = parseFloat(data.BRLUSD.ask); // USD para BRL
             }
 
-            document.getElementById("resultado").innerHTML = Resultado: ${resultado.toFixed(2)} ${moedaDestino};
+            // Verifica se a cotação foi obtida corretamente
+            if (isNaN(cotacao)) {
+                alert("Erro ao obter a cotação.");
+                return;
+            }
+
+            // Lógica de conversão com base na cotação
+            if (moeda === "BRL") {
+                // Convertendo de BRL para USD: valor / cotação
+                valorConvertido = valor / cotacao;
+            } else {
+                // Convertendo de USD para BRL: valor * cotação
+                valorConvertido = valor * cotacao;
+            }
+
+            // Verifica se o valor convertido é válido
+            if (isNaN(valorConvertido) || !isFinite(valorConvertido)) {
+                alert("Erro na conversão. Tente novamente.");
+                return;
+            }
+
+            // Formatação para exibir o valor de acordo com a moeda de destino
+            const formatador = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: moedaDestino === 'BRL' ? 'BRL' : 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            document.getElementById("resultado").innerHTML = `Resultado: ${formatador.format(valorConvertido)}`;
         })
         .catch(error => {
             console.error("Erro ao obter a cotação:", error);
-            alert("Erro ao obter a cotação. Tente novamente.");
+            alert("Houve um problema ao obter a cotação. Verifique sua conexão ou tente novamente mais tarde.");
         });
 });
