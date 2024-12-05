@@ -47,7 +47,15 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
                 return;
             }
 
-            document.getElementById("resultado").innerHTML = `Resultado: ${valorConvertido.toFixed(2)} ${moedaDestino}`;
+            // Formatação dos valores com base na moeda destino
+            const formatador = new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: moedaDestino === 'BRL' ? 'BRL' : 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            document.getElementById("resultado").innerHTML = `Resultado: ${formatador.format(valorConvertido)}`;
         })
         .catch(error => {
             console.error("Erro ao obter a cotação:", error);
