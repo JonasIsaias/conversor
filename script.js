@@ -13,7 +13,7 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     let moedaDestino = '';
     let valorConvertido = 0;
 
-    // Função para construir URL
+    // Função para construir URL de acordo com a moeda de origem e destino
     function obterCotacaoUrl(origem, destino) {
         return `https://economia.awesomeapi.com.br/last/${origem}-${destino}`;
     }
@@ -31,11 +31,13 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            // Extraímos a cotação com base no par de moedas
+            // Verifica as cotações corretas dependendo da direção da conversão
             let cotacao;
             if (moeda === "BRL") {
+                // Cotação de BRL para USD: A chave é USDBRL.ask
                 cotacao = parseFloat(data.USDBRL.ask); // BRL para USD
             } else {
+                // Cotação de USD para BRL: A chave é BRLUSD.ask
                 cotacao = parseFloat(data.BRLUSD.ask); // USD para BRL
             }
 
@@ -44,7 +46,7 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
                 return;
             }
 
-            // Lógica de conversão corrigida:
+            // Cálculo da conversão
             if (moeda === "BRL") {
                 // Convertendo de BRL para USD: Divide o valor em BRL pela cotação USD-BRL
                 valorConvertido = valor / cotacao;
