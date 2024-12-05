@@ -30,10 +30,15 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
         moedaDestino = "BRL";
     }
 
+    // Exibe a URL da API no console para verificar se está correta
+    console.log("URL da API:", url);
+
     fetch(url)
         .then(response => response.json())
         .then(data => {
-            // Verifica se as cotações estão corretas
+            console.log("Resposta da API:", data); // Verifica os dados recebidos da API
+
+            // Verificar se as cotações estão corretas
             let cotacao;
             if (moeda === "BRL") {
                 cotacao = parseFloat(data.USDBRL.ask); // BRL para USD
@@ -70,6 +75,7 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
                 maximumFractionDigits: 2
             });
 
+            // Exibe o valor convertido na tela
             document.getElementById("resultado").innerHTML = `Resultado: ${formatador.format(valorConvertido)}`;
         })
         .catch(error => {
