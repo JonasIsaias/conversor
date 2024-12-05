@@ -41,9 +41,9 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
             // Verificar se as cotações estão corretas
             let cotacao;
             if (moeda === "BRL") {
-                cotacao = parseFloat(data.USDBRL.ask); // BRL para USD
+                cotacao = parseFloat(data.USDBRL.ask); // BRL para USD (cotação de 1 USD em BRL)
             } else {
-                cotacao = parseFloat(data.BRLUSD.ask); // USD para BRL
+                cotacao = parseFloat(data.BRLUSD.ask); // USD para BRL (cotação de 1 BRL em USD)
             }
 
             // Verifica se a cotação foi obtida corretamente
