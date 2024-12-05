@@ -32,7 +32,7 @@ document.getElementById("converter-form").addEventListener("submit", function(ev
                 // Para conversão de BRL para USD, dividimos o valor pelo valor da cotação
                 resultado = valor / cotacao;
             } else {
-                resultado = valor / cotacao;
+                resultado = valor * cotacao;
             }
 
             document.getElementById("resultado").innerHTML = `Resultado: ${resultado.toFixed(2)} ${moedaDestino}`;
